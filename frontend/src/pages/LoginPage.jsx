@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Mail, Github, User, ArrowRight, Sparkles } from 'lucide-react';
+import AccountSelectionModal from '../components/AccountSelectionModal';
 
 const LoginPage = () => {
     const [isSignup, setIsSignup] = useState(false);
@@ -10,6 +11,8 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [showAccountModal, setShowAccountModal] = useState(false);
+    const [selectedProvider, setSelectedProvider] = useState(null);
     const { login, signup, loginWithOAuth } = useAuth();
     const navigate = useNavigate();
 
@@ -27,7 +30,6 @@ const LoginPage = () => {
                 }
                 await signup(username, email, password);
                 setError('');
-                // Auto-login after signup
                 await login(username, password);
             } else {
                 await login(username, password);
@@ -40,10 +42,17 @@ const LoginPage = () => {
         }
     };
 
-    const handleOAuth = async (provider) => {
+    const handleOAuthClick = (provider) => {
+        setSelectedProvider(provider);
+        setShowAccountModal(true);
+    };
+
+    const handleAccountSelect = async (account) => {
+        setShowAccountModal(false);
         setLoading(true);
         try {
-            await loginWithOAuth(provider);
+            // Simulate OAuth login with selected account
+            await loginWithOAuth(selectedProvider, account);
             navigate('/');
         } catch (err) {
             setError('OAuth login failed');
@@ -150,7 +159,7 @@ const LoginPage = () => {
                     {/* OAuth Buttons */}
                     <div className="mt-6 grid grid-cols-2 gap-4">
                         <button
-                            onClick={() => handleOAuth('google')}
+                            onClick={() => handleOAuthClick('google')}
                             disabled={loading}
                             className="flex items-center justify-center gap-3 py-3 border border-white/10 rounded-xl hover:bg-white/5 transition-all group disabled:opacity-50"
                         >
@@ -163,7 +172,7 @@ const LoginPage = () => {
                             <span className="text-white/70 group-hover:text-white transition-colors">Google</span>
                         </button>
                         <button
-                            onClick={() => handleOAuth('github')}
+                            onClick={() => handleOAuthClick('github')}
                             disabled={loading}
                             className="flex items-center justify-center gap-3 py-3 border border-white/10 rounded-xl hover:bg-white/5 transition-all group disabled:opacity-50"
                         >
@@ -199,6 +208,14 @@ const LoginPage = () => {
                     </div>
                 )}
             </div>
+
+            {/* Account Selection Modal */}
+            <AccountSelectionModal
+                isOpen={showAccountModal}
+                onClose={() => setShowAccountModal(false)}
+                onSelectAccount={handleAccountSelect}
+                provider={selectedProvider}
+            />
         </div>
     );
 };

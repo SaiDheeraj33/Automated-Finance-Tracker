@@ -8,7 +8,6 @@ export const AuthProvider = ({ children }) => {
     const [registeredUsers, setRegisteredUsers] = useState([]);
 
     useEffect(() => {
-        // Load stored user and registered users
         const storedUser = localStorage.getItem('user');
         const storedRegisteredUsers = localStorage.getItem('registeredUsers');
 
@@ -24,7 +23,6 @@ export const AuthProvider = ({ children }) => {
     const signup = (username, email, password) => {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                // Check if user already exists
                 const existingUser = registeredUsers.find(u => u.username === username || u.email === email);
                 if (existingUser) {
                     reject(new Error('User already exists'));
@@ -43,7 +41,6 @@ export const AuthProvider = ({ children }) => {
     const login = (username, password) => {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                // Check default users
                 if (username === 'admin' && password === 'password') {
                     const mockUser = { username: 'admin', role: 'admin', token: 'mock-jwt-token-admin' };
                     setUser(mockUser);
@@ -52,7 +49,6 @@ export const AuthProvider = ({ children }) => {
                     return;
                 }
 
-                // Check registered users
                 const registeredUser = registeredUsers.find(
                     u => u.username === username && u.password === password
                 );
@@ -74,14 +70,15 @@ export const AuthProvider = ({ children }) => {
         });
     };
 
-    const loginWithOAuth = (provider) => {
+    const loginWithOAuth = (provider, account = null) => {
         return new Promise((resolve) => {
             setTimeout(() => {
                 const mockUser = {
-                    username: `${provider}_user`,
-                    email: `user@${provider}.com`,
+                    username: account ? account.name : `${provider}_user`,
+                    email: account ? account.email : `user@${provider}.com`,
                     role: 'user',
-                    token: `mock-oauth-token-${provider}`
+                    token: `mock-oauth-token-${provider}`,
+                    avatar: account ? account.avatar : null
                 };
                 setUser(mockUser);
                 localStorage.setItem('user', JSON.stringify(mockUser));
