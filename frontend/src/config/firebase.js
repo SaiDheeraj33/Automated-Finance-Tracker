@@ -1,15 +1,15 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
-// TODO: Replace with your Firebase project configuration
-// Get these values from: Firebase Console > Project Settings > General > Your apps > SDK setup and configuration
+// Firebase configuration for Finance Tracker
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyAySKh7HUhfEHY6EeUUfqpPuTQ6nMXv-Uc",
+    authDomain: "finance-tracker-web-7b008.firebaseapp.com",
+    projectId: "finance-tracker-web-7b008",
+    storageBucket: "finance-tracker-web-7b008.firebasestorage.app",
+    messagingSenderId: "410174953094",
+    appId: "1:410174953094:web:eb6ce627b1782c7d762307",
+    measurementId: "G-BMLG3EPVL2"
 };
 
 // Initialize Firebase
