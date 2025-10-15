@@ -78,7 +78,11 @@ export const AuthProvider = ({ children }) => {
                     return;
                 }
 
-                const registeredUser = registeredUsers.find(
+                // Get fresh registered users from localStorage
+                const storedUsers = localStorage.getItem('registeredUsers');
+                const currentRegisteredUsers = storedUsers ? JSON.parse(storedUsers) : [];
+
+                const registeredUser = currentRegisteredUsers.find(
                     u => u.username === username && u.password === password
                 );
 

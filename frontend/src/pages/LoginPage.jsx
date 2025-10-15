@@ -27,8 +27,11 @@ const LoginPage = () => {
                     setLoading(false);
                     return;
                 }
+                // Wait for signup to complete
                 await signup(username, email, password);
-                setError('');
+                // Small delay to ensure localStorage is updated
+                await new Promise(resolve => setTimeout(resolve, 100));
+                // Auto-login after successful signup
                 await login(username, password);
             } else {
                 await login(username, password);
