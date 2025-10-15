@@ -170,9 +170,9 @@ function Dashboard() {
                                 <select
                                     value={newExpense.category}
                                     onChange={(e) => setNewExpense({ ...newExpense, category: e.target.value })}
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                                    className="w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all [&>option]:bg-slate-800 [&>option]:text-white"
                                 >
-                                    {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                                    {categories.map(cat => <option key={cat} value={cat} className="bg-slate-800 text-white py-2">{cat}</option>)}
                                 </select>
                             </div>
                             <div>
