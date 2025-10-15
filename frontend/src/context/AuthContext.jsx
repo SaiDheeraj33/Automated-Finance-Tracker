@@ -5,27 +5,65 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [registeredUsers, setRegisteredUsers] = useState([]);
 
     useEffect(() => {
-        // Check for stored token on load
+        // Load stored user and registered users
         const storedUser = localStorage.getItem('user');
+        const storedRegisteredUsers = localStorage.getItem('registeredUsers');
+
         if (storedUser) {
             setUser(JSON.parse(storedUser));
+        }
+        if (storedRegisteredUsers) {
+            setRegisteredUsers(JSON.parse(storedRegisteredUsers));
         }
         setLoading(false);
     }, []);
 
-    const login = (username, password) => {
-        // Mock Login Logic
+    const signup = (username, email, password) => {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
+                // Check if user already exists
+                const existingUser = registeredUsers.find(u => u.username === username || u.email === email);
+                if (existingUser) {
+                    reject(new Error('User already exists'));
+                    return;
+                }
+
+                const newUser = { username, email, password, role: 'user' };
+                const updatedUsers = [...registeredUsers, newUser];
+                setRegisteredUsers(updatedUsers);
+                localStorage.setItem('registeredUsers', JSON.stringify(updatedUsers));
+                resolve(newUser);
+            }, 1000);
+        });
+    };
+
+    const login = (username, password) => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                // Check default users
                 if (username === 'admin' && password === 'password') {
                     const mockUser = { username: 'admin', role: 'admin', token: 'mock-jwt-token-admin' };
                     setUser(mockUser);
                     localStorage.setItem('user', JSON.stringify(mockUser));
                     resolve(mockUser);
-                } else if (username === 'user' && password === 'password') {
-                    const mockUser = { username: 'user', role: 'user', token: 'mock-jwt-token-user' };
+                    return;
+                }
+
+                // Check registered users
+                const registeredUser = registeredUsers.find(
+                    u => u.username === username && u.password === password
+                );
+
+                if (registeredUser) {
+                    const mockUser = {
+                        username: registeredUser.username,
+                        email: registeredUser.email,
+                        role: registeredUser.role,
+                        token: `mock-jwt-token-${registeredUser.username}`
+                    };
                     setUser(mockUser);
                     localStorage.setItem('user', JSON.stringify(mockUser));
                     resolve(mockUser);
@@ -37,10 +75,14 @@ export const AuthProvider = ({ children }) => {
     };
 
     const loginWithOAuth = (provider) => {
-        // Mock OAuth Logic
         return new Promise((resolve) => {
             setTimeout(() => {
-                const mockUser = { username: `${provider}_user`, role: 'user', token: `mock-oauth-token-${provider}` };
+                const mockUser = {
+                    username: `${provider}_user`,
+                    email: `user@${provider}.com`,
+                    role: 'user',
+                    token: `mock-oauth-token-${provider}`
+                };
                 setUser(mockUser);
                 localStorage.setItem('user', JSON.stringify(mockUser));
                 resolve(mockUser);
@@ -54,7 +96,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, loginWithOAuth, logout, loading }}>
+        <AuthContext.Provider value={{ user, login, signup, loginWithOAuth, logout, loading }}>
             {!loading && children}
         </AuthContext.Provider>
     );
