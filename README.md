@@ -1,56 +1,249 @@
-# Automated Finance Tracker
+# 💰 Automated Finance Tracker
 
-A robust financial tracking application built with Java and Spring Boot. This application helps users manage their personal finances by tracking expenses, income, and providing insightful analytics.
+A modern, full-stack financial tracking application with real-time expense management, interactive visualizations, and secure authentication. Built with React, Firebase, and Spring Boot.
 
-## Features
+![Finance Tracker](https://img.shields.io/badge/React-19.2.0-blue) ![Firebase](https://img.shields.io/badge/Firebase-Auth-orange) ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1-06B6D4) ![Vite](https://img.shields.io/badge/Vite-7.2-646CFF)
 
-- **Expense Tracking**: Log daily expenses with categories and descriptions.
-- **Income Management**: Record various income sources.
-- **Budget Planning**: Set monthly budgets and track adherence.
-- **Reporting**: Generate reports to visualize spending habits.
-- **RESTful API**: Fully documented API endpoints for integration.
+## ✨ Features
 
-## Tech Stack
+### 🔐 Authentication & Security
+- **Firebase Google OAuth**: Real Google sign-in with account selection popup
+- **Username/Password Auth**: Local registration and login with encrypted storage
+- **Role-Based Access Control (RBAC)**: Admin and user role management
+- **Protected Routes**: Secure navigation with authentication guards
+- **Session Persistence**: Auto-login with localStorage
 
-- **Language**: Java
-- **Framework**: Spring Boot
-- **Build Tool**: Maven
-- **Database**: H2 / MySQL (Configurable)
+### 📊 Financial Management
+- **Expense Tracking**: Add, view, and categorize expenses
+- **Interactive Dashboard**: Real-time statistics and insights
+- **Category Management**: 5 predefined categories (Food, Utilities, Transport, Entertainment, Other)
+- **Transaction History**: Sortable table with all transactions
+- **Budget Analytics**: Track total expenses and daily averages
 
-## Getting Started
+### 📈 Data Visualization
+- **Doughnut Chart**: Visual expense breakdown by category
+- **Bar Chart**: Daily spending trends
+- **Stat Cards**: Quick overview of total expenses, transaction count, and averages
+- **Color-Coded Categories**: Easy identification with vibrant colors
+
+### 🎨 Modern UI/UX
+- **Dark Theme**: Sleek gradient design with glassmorphism effects
+- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile
+- **Animated Backgrounds**: Dynamic gradient animations
+- **Smooth Transitions**: Polished hover effects and interactions
+- **Modern Icons**: Lucide React icons throughout
+
+## 🛠️ Tech Stack
+
+### Frontend
+| Technology | Version | Purpose |
+|-----------|---------|---------|
+| **React** | 19.2.0 | Core UI library for building interactive components |
+| **Vite** | 7.2.4 | Lightning-fast build tool and dev server |
+| **TailwindCSS** | 4.1.17 | Utility-first CSS framework for rapid styling |
+| **React Router** | 6.x | Client-side routing and navigation |
+| **Chart.js** | 4.5.1 | Powerful charting library for data visualization |
+| **React-Chartjs-2** | 5.3.1 | React wrapper for Chart.js integration |
+| **Lucide React** | Latest | Modern icon library with 1000+ icons |
+| **Axios** | 1.13.2 | HTTP client for API requests |
+
+### Authentication & Backend Services
+| Technology | Purpose |
+|-----------|---------|
+| **Firebase Auth** | Real Google OAuth 2.0 authentication with popup flow |
+| **Firebase SDK** | Client-side Firebase integration and auth state management |
+| **LocalStorage API** | Client-side data persistence for user sessions and registered users |
+
+### Backend (Original)
+| Technology | Purpose |
+|-----------|---------|
+| **Java** | Backend programming language |
+| **Spring Boot** | RESTful API framework |
+| **Maven** | Build automation and dependency management |
+| **H2/MySQL** | Database options for data persistence |
+
+### Development Tools
+| Tool | Purpose |
+|------|---------|
+| **ESLint** | Code quality and consistency enforcement |
+| **PostCSS** | CSS processing and optimization |
+| **Autoprefixer** | Automatic vendor prefix addition |
+| **Git** | Version control and collaboration |
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Java Development Kit (JDK) 17 or later
-- Maven 3.6+
+- **Node.js** 18+ and npm
+- **Java Development Kit (JDK)** 17+ (for backend)
+- **Maven** 3.6+ (for backend)
+- **Firebase Account** (free tier works)
 
-### Installation
+### Frontend Setup
 
-1. Clone the repository:
+1. **Clone the repository**:
    ```bash
    git clone https://github.com/SaiDheeraj33/Automated-Finance-Tracker.git
+   cd Automated-Finance-Tracker/frontend
    ```
-2. Navigate to the project directory:
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Configure Firebase** (Required for Google OAuth):
+   - Follow instructions in `FIREBASE_SETUP.md`
+   - Update `src/config/firebase.js` with your Firebase credentials
+
+4. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
+   The app will be available at `http://localhost:5173`
+
+### Backend Setup (Optional)
+
+1. **Navigate to project root**:
    ```bash
    cd Automated-Finance-Tracker
    ```
-3. Build the project:
+
+2. **Build the project**:
    ```bash
    mvn clean install
    ```
 
-### Running the Application
+3. **Run the Spring Boot application**:
+   ```bash
+   mvn spring-boot:run
+   ```
+   The API will start on `http://localhost:8080`
 
-Run the application using Maven:
-```bash
-mvn spring-boot:run
+## 🔑 Authentication Options
+
+### 1. Google OAuth (Recommended)
+- Click "Google" button
+- Select your Google account
+- Instant login with profile data
+
+### 2. Username/Password
+- **Demo Account**: `admin` / `password`
+- **Sign Up**: Create a new account with username, email, and password
+- **Sign In**: Use your registered credentials
+
+### 3. GitHub OAuth (Simulated)
+- Account selection modal for demo purposes
+- Full OAuth flow can be implemented similarly to Google
+
+## 📁 Project Structure
+
 ```
-The application will start on `http://localhost:8080`.
+Automated-Finance-Tracker/
+├── frontend/                    # React application
+│   ├── src/
+│   │   ├── components/         # Reusable UI components
+│   │   │   └── AccountSelectionModal.jsx
+│   │   ├── config/             # Configuration files
+│   │   │   └── firebase.js     # Firebase setup
+│   │   ├── context/            # React Context providers
+│   │   │   └── AuthContext.jsx # Authentication state
+│   │   ├── pages/              # Page components
+│   │   │   ├── Dashboard.jsx   # Main dashboard
+│   │   │   └── LoginPage.jsx   # Auth page
+│   │   ├── App.jsx             # Root component with routing
+│   │   └── main.jsx            # Application entry point
+│   ├── public/                 # Static assets
+│   ├── package.json            # Dependencies
+│   └── vite.config.js          # Vite configuration
+├── src/                        # Java backend source
+├── pom.xml                     # Maven configuration
+├── FIREBASE_SETUP.md           # Firebase setup guide
+└── README.md                   # This file
+```
 
-## Contributing
+## 🎯 Key Features Explained
 
-Contributions are welcome! Please fork the repository and submit a pull request.
+### Firebase Google OAuth Integration
+- **Real Authentication**: Uses Firebase's `signInWithPopup` for genuine Google OAuth
+- **Account Selection**: Forces account picker with `prompt: 'select_account'`
+- **Auto-Sync**: User data (name, email, photo) automatically synced from Google
+- **Secure**: No credentials stored locally, managed by Firebase
 
-## License
+### Hybrid Authentication System
+- **Multiple Auth Methods**: Supports Google OAuth, username/password, and simulated GitHub
+- **Seamless Switching**: Users can use different methods without conflicts
+- **Persistent Sessions**: Auto-login on page refresh using localStorage and Firebase state
 
-This project is licensed under the MIT License.
+### Modern UI Design
+- **Glassmorphism**: Frosted glass effect with backdrop blur
+- **Gradient Animations**: Pulsing background orbs for visual interest
+- **Dark Theme**: Easy on the eyes with purple/pink accent colors
+- **Responsive**: Mobile-first design that scales beautifully
+
+## 🔧 Configuration
+
+### Firebase Configuration
+Edit `frontend/src/config/firebase.js`:
+```javascript
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  // ... other config
+};
+```
+
+### Customization
+- **Categories**: Edit `categories` array in `Dashboard.jsx`
+- **Colors**: Modify Tailwind classes or `tailwind.config.js`
+- **Charts**: Customize in `Dashboard.jsx` chart configurations
+
+## 📝 Available Scripts
+
+### Frontend
+```bash
+npm run dev      # Start development server
+npm run build    # Build for production
+npm run preview  # Preview production build
+npm run lint     # Run ESLint
+```
+
+### Backend
+```bash
+mvn clean install     # Build project
+mvn spring-boot:run   # Run application
+mvn test             # Run tests
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- Firebase for authentication services
+- Chart.js for beautiful visualizations
+- TailwindCSS for rapid UI development
+- Lucide for modern icons
+- Vite for blazing-fast development experience
+
+## 📧 Contact
+
+**Sai Dheeraj** - [@SaiDheeraj33](https://github.com/SaiDheeraj33)
+
+Project Link: [https://github.com/SaiDheeraj33/Automated-Finance-Tracker](https://github.com/SaiDheeraj33/Automated-Finance-Tracker)
+
+---
+
+⭐ Star this repo if you find it helpful!
