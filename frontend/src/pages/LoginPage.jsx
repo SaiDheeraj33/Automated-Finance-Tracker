@@ -12,8 +12,7 @@ const LoginPage = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [showAccountModal, setShowAccountModal] = useState(false);
-    const [selectedProvider, setSelectedProvider] = useState(null);
-    const { login, signup, loginWithOAuth } = useAuth();
+    const { login, signup, loginWithGoogle, loginWithOAuth } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -42,8 +41,26 @@ const LoginPage = () => {
         }
     };
 
-    const handleOAuthClick = (provider) => {
-        setSelectedProvider(provider);
+    const handleGoogleSignIn = async () => {
+        setLoading(true);
+        setError('');
+        try {
+            await loginWithGoogle();
+            navigate('/');
+        } catch (err) {
+            if (err.code === 'auth/popup-closed-by-user') {
+                setError('Sign-in cancelled');
+            } else if (err.code === 'auth/configuration-not-found') {
+                setError('Firebase not configured. Please add your Firebase credentials to src/config/firebase.js');
+            } else {
+                setError('Google sign-in failed. Please check Firebase configuration.');
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleGitHubClick = () => {
         setShowAccountModal(true);
     };
 
@@ -51,11 +68,10 @@ const LoginPage = () => {
         setShowAccountModal(false);
         setLoading(true);
         try {
-            // Simulate OAuth login with selected account
-            await loginWithOAuth(selectedProvider, account);
+            await loginWithOAuth('github', account);
             navigate('/');
         } catch (err) {
-            setError('OAuth login failed');
+            setError('GitHub login failed');
         } finally {
             setLoading(false);
         }
@@ -159,7 +175,7 @@ const LoginPage = () => {
                     {/* OAuth Buttons */}
                     <div className="mt-6 grid grid-cols-2 gap-4">
                         <button
-                            onClick={() => handleOAuthClick('google')}
+                            onClick={handleGoogleSignIn}
                             disabled={loading}
                             className="flex items-center justify-center gap-3 py-3 border border-white/10 rounded-xl hover:bg-white/5 transition-all group disabled:opacity-50"
                         >
@@ -172,7 +188,7 @@ const LoginPage = () => {
                             <span className="text-white/70 group-hover:text-white transition-colors">Google</span>
                         </button>
                         <button
-                            onClick={() => handleOAuthClick('github')}
+                            onClick={handleGitHubClick}
                             disabled={loading}
                             className="flex items-center justify-center gap-3 py-3 border border-white/10 rounded-xl hover:bg-white/5 transition-all group disabled:opacity-50"
                         >
@@ -209,12 +225,12 @@ const LoginPage = () => {
                 )}
             </div>
 
-            {/* Account Selection Modal */}
+            {/* Account Selection Modal (for GitHub) */}
             <AccountSelectionModal
                 isOpen={showAccountModal}
                 onClose={() => setShowAccountModal(false)}
                 onSelectAccount={handleAccountSelect}
-                provider={selectedProvider}
+                provider="github"
             />
         </div>
     );

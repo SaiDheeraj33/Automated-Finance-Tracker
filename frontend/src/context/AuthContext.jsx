@@ -1,4 +1,11 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { auth } from '../config/firebase';
+import {
+    signInWithPopup,
+    GoogleAuthProvider,
+    signOut as firebaseSignOut,
+    onAuthStateChanged
+} from 'firebase/auth';
 
 const AuthContext = createContext(null);
 
@@ -8,16 +15,38 @@ export const AuthProvider = ({ children }) => {
     const [registeredUsers, setRegisteredUsers] = useState([]);
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
+        // Load registered users from localStorage
         const storedRegisteredUsers = localStorage.getItem('registeredUsers');
-
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
         if (storedRegisteredUsers) {
             setRegisteredUsers(JSON.parse(storedRegisteredUsers));
         }
-        setLoading(false);
+
+        // Listen to Firebase auth state changes
+        const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+            if (firebaseUser) {
+                // User is signed in with Firebase
+                const userData = {
+                    username: firebaseUser.displayName || firebaseUser.email.split('@')[0],
+                    email: firebaseUser.email,
+                    role: 'user',
+                    token: firebaseUser.accessToken,
+                    avatar: firebaseUser.photoURL,
+                    provider: 'google'
+                };
+                setUser(userData);
+            } else {
+                // Check for local storage user (for username/password login)
+                const storedUser = localStorage.getItem('user');
+                if (storedUser) {
+                    setUser(JSON.parse(storedUser));
+                } else {
+                    setUser(null);
+                }
+            }
+            setLoading(false);
+        });
+
+        return () => unsubscribe();
     }, []);
 
     const signup = (username, email, password) => {
@@ -70,7 +99,23 @@ export const AuthProvider = ({ children }) => {
         });
     };
 
+    const loginWithGoogle = async () => {
+        try {
+            const provider = new GoogleAuthProvider();
+            // Force account selection every time
+            provider.setCustomParameters({
+                prompt: 'select_account'
+            });
+            const result = await signInWithPopup(auth, provider);
+            return result.user;
+        } catch (error) {
+            console.error('Google sign-in error:', error);
+            throw error;
+        }
+    };
+
     const loginWithOAuth = (provider, account = null) => {
+        // For GitHub (mock) - keep existing behavior
         return new Promise((resolve) => {
             setTimeout(() => {
                 const mockUser = {
@@ -87,13 +132,21 @@ export const AuthProvider = ({ children }) => {
         });
     };
 
-    const logout = () => {
-        setUser(null);
-        localStorage.removeItem('user');
+    const logout = async () => {
+        try {
+            // Sign out from Firebase if user is signed in with Firebase
+            if (auth.currentUser) {
+                await firebaseSignOut(auth);
+            }
+            setUser(null);
+            localStorage.removeItem('user');
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, signup, loginWithOAuth, logout, loading }}>
+        <AuthContext.Provider value={{ user, login, signup, loginWithGoogle, loginWithOAuth, logout, loading }}>
             {!loading && children}
         </AuthContext.Provider>
     );
