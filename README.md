@@ -140,27 +140,83 @@ A modern, full-stack financial tracking application with real-time expense manag
 
 ```
 Automated-Finance-Tracker/
-├── frontend/                    # React application
+├── frontend/                           # React Frontend Application
 │   ├── src/
-│   │   ├── components/         # Reusable UI components
-│   │   │   └── AccountSelectionModal.jsx
-│   │   ├── config/             # Configuration files
-│   │   │   └── firebase.js     # Firebase setup
-│   │   ├── context/            # React Context providers
-│   │   │   └── AuthContext.jsx # Authentication state
-│   │   ├── pages/              # Page components
-│   │   │   ├── Dashboard.jsx   # Main dashboard
-│   │   │   └── LoginPage.jsx   # Auth page
-│   │   ├── App.jsx             # Root component with routing
-│   │   └── main.jsx            # Application entry point
-│   ├── public/                 # Static assets
-│   ├── package.json            # Dependencies
-│   └── vite.config.js          # Vite configuration
-├── src/                        # Java backend source
-├── pom.xml                     # Maven configuration
-├── FIREBASE_SETUP.md           # Firebase setup guide
-└── README.md                   # This file
+│   │   ├── components/                # Reusable UI components
+│   │   │   └── AccountSelectionModal.jsx  # OAuth account picker modal
+│   │   ├── config/                    # Configuration files
+│   │   │   └── firebase.js            # Firebase authentication setup
+│   │   ├── context/                   # React Context providers
+│   │   │   └── AuthContext.jsx        # Authentication state management
+│   │   ├── pages/                     # Page components
+│   │   │   ├── Dashboard.jsx          # Main dashboard with charts
+│   │   │   └── LoginPage.jsx          # Authentication page
+│   │   ├── App.jsx                    # Root component with routing
+│   │   ├── App.css                    # Global styles
+│   │   ├── index.css                  # Tailwind directives
+│   │   └── main.jsx                   # Application entry point
+│   ├── public/                        # Static assets
+│   ├── node_modules/                  # Dependencies
+│   ├── package.json                   # Frontend dependencies
+│   ├── vite.config.js                 # Vite configuration
+│   ├── tailwind.config.js             # Tailwind CSS config
+│   ├── postcss.config.js              # PostCSS configuration
+│   └── eslint.config.js               # ESLint rules
+│
+├── src/                               # Java Backend Application
+│   └── main/
+│       ├── java/org/fta/              # Java source code
+│       │   ├── Main.java              # Spring Boot application entry
+│       │   ├── dto/                   # Data Transfer Objects
+│       │   │   └── ExpenseDto.java    # Expense data transfer object
+│       │   ├── entities/              # JPA Entity classes
+│       │   │   ├── Budgets.java       # Budget entity
+│       │   │   ├── Categories.java    # Category entity
+│       │   │   ├── Expenses.java      # Expense entity
+│       │   │   ├── RefreshToken.java  # JWT refresh token entity
+│       │   │   ├── UserRole.java      # User role entity
+│       │   │   └── Users.java         # User entity
+│       │   ├── enums/                 # Enumeration types
+│       │   │   └── PaymentType.java   # Payment method enum
+│       │   ├── exceptions/            # Custom exceptions
+│       │   │   └── ResourceNotFoundException.java
+│       │   ├── repositories/          # Spring Data JPA repositories
+│       │   │   ├── ExpenseRepository.java
+│       │   │   ├── RefreshTokenRepository.java
+│       │   │   └── UserRepository.java
+│       │   └── service/               # Business logic services
+│       │       ├── CustomUserDetails.java
+│       │       ├── JwtService.java    # JWT token management
+│       │       ├── RefreshTokenService.java
+│       │       └── UserDetailsServiceImpl.java
+│       └── resources/                 # Application resources
+│           └── application.properties # Spring Boot configuration
+│
+├── .git/                              # Git version control
+├── .gitignore                         # Git ignore rules
+├── .idea/                             # IntelliJ IDEA settings
+├── pom.xml                            # Maven build configuration
+├── FIREBASE_SETUP.md                  # Firebase setup instructions
+├── README.md                          # This file
+├── contribution_log.txt               # Development log
+└── random_commits.ps1                 # Commit generation script
 ```
+
+### Key Directories Explained
+
+#### Frontend (`/frontend`)
+- **components/**: Reusable React components like modals and widgets
+- **config/**: Configuration files for Firebase and other services
+- **context/**: React Context API for global state (auth, theme, etc.)
+- **pages/**: Full page components (Dashboard, Login, etc.)
+
+#### Backend (`/src/main/java/org/fta`)
+- **entities/**: Database models mapped with JPA annotations
+- **repositories/**: Data access layer using Spring Data JPA
+- **service/**: Business logic and authentication services
+- **dto/**: Data transfer objects for API requests/responses
+- **exceptions/**: Custom exception classes for error handling
+
 
 ## 🎯 Key Features Explained
 
